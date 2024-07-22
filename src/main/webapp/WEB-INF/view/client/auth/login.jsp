@@ -48,6 +48,18 @@ uri="http://www.springframework.org/tags/form" %>
                                                 </div>
                                             </c:if>
 
+                                            <c:if
+                                                test="${param.logout != null}"
+                                            >
+                                                <div
+                                                    class="my-2"
+                                                    style="color: green"
+                                                >
+                                                    Bạn Đã Đăng Xuất Thành Công
+                                                    !! .
+                                                </div>
+                                            </c:if>
+
                                             <div class="form-floating mb-3">
                                                 <input
                                                     class="form-control"

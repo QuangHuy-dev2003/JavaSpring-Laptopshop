@@ -1,11 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib
-uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>${product.name} - LaptopShop</title>
+        <title>${product.name} - Laptopshop</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <meta content="" name="keywords" />
         <meta content="" name="description" />
@@ -71,7 +73,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                     class="breadcrumb-item active"
                                     aria-current="page"
                                 >
-                                    Chi tiết sản phẩm
+                                    Chi Tiết Sản Phẩm
                                 </li>
                             </ol>
                         </nav>
@@ -91,13 +93,11 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                             </div>
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">${product.name}</h4>
-                                <p class="mb-3">
-                                    ${product.factory} - ${product.target}
-                                </p>
+                                <p class="mb-3">${product.factory}</p>
                                 <h5 class="fw-bold mb-3">
                                     <fmt:formatNumber
-                                        value="${product.price}"
                                         type="number"
+                                        value="${product.price}"
                                     />
                                     đ
                                 </h5>
@@ -106,9 +106,10 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                     <i class="fa fa-star text-secondary"></i>
                                     <i class="fa fa-star text-secondary"></i>
                                     <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
+                                    <i class="fa fa-star"></i>
                                 </div>
                                 <p class="mb-4">${product.shortDesc}</p>
+
                                 <div
                                     class="input-group quantity mb-5"
                                     style="width: 100px"
@@ -124,6 +125,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                         type="text"
                                         class="form-control form-control-sm text-center border-0"
                                         value="1"
+                                        data-cart-detail-index="0"
                                     />
                                     <div class="input-group-btn">
                                         <button
@@ -133,14 +135,38 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                         </button>
                                     </div>
                                 </div>
-                                <a
-                                    href="#"
-                                    class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"
-                                    ><i
-                                        class="fa fa-shopping-bag me-2 text-primary"
-                                    ></i>
-                                    Add to cart</a
+                                <form
+                                    action="/add-product-from-view-detail"
+                                    method="post"
+                                    modelAttribute="product"
                                 >
+                                    <input
+                                        type="hidden"
+                                        name="${_csrf.parameterName}"
+                                        value="${_csrf.token}"
+                                    />
+                                    <input
+                                        class="form-control d-none"
+                                        type="text"
+                                        value="${product.id}"
+                                        name="id"
+                                    />
+
+                                    <input
+                                        class="form-control d-none"
+                                        type="text"
+                                        name="quantity"
+                                        id="cartDetails0.quantity"
+                                    />
+                                    <button
+                                        class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"
+                                    >
+                                        <i
+                                            class="fa fa-shopping-bag me-2 text-primary"
+                                        ></i>
+                                        Add to cart
+                                    </button>
+                                </form>
                             </div>
                             <div class="col-lg-12">
                                 <nav>
@@ -199,7 +225,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                                     ><i
                                                         class="fas fa-apple-alt me-2"
                                                     ></i
-                                                    >Asus</a
+                                                    >Dell</a
                                                 >
                                                 <span>(5)</span>
                                             </div>
@@ -212,7 +238,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                                     ><i
                                                         class="fas fa-apple-alt me-2"
                                                     ></i
-                                                    >Acer</a
+                                                    >Asus</a
                                                 >
                                                 <span>(2)</span>
                                             </div>
@@ -225,7 +251,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
                                                     ><i
                                                         class="fas fa-apple-alt me-2"
                                                     ></i
-                                                    >Dell</a
+                                                    >Acer</a
                                                 >
                                                 <span>(8)</span>
                                             </div>

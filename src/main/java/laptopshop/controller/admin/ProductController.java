@@ -1,7 +1,11 @@
 package laptopshop.controller.admin;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import laptopshop.domain.Product;
-import laptopshop.domain.User;
 import laptopshop.service.ProductService;
 import laptopshop.service.UploadService;
 
@@ -34,10 +37,29 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getProduct(Model model) {
-        List<Product> prs = this.productService.fetchProducts();
-        model.addAttribute("products", prs);
-        return "/admin/product/show";
+    public String getProduct(Model model,
+            @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            } else {
+                page = 1;
+            }
+
+        } catch (Exception e) {
+            // page = 1;
+
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        Page<Product> prs = this.productService.fetchProducts(pageable);
+        List<Product> listProducts = prs.getContent();
+        model.addAttribute("products", listProducts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", prs.getTotalPages());
+
+        return "admin/product/show";
     }
 
     @GetMapping("/admin/product/create")
@@ -51,7 +73,7 @@ public class ProductController {
         Product products = this.productService.fetchProductById(id);
         model.addAttribute("product", products);
         model.addAttribute("id", id);
-        return "/admin/product/detail";
+        return "admin/product/detail";
     }
 
     @PostMapping(value = "/admin/product/create")
@@ -67,7 +89,7 @@ public class ProductController {
 
         // Validate
         if (newUserBindingResult.hasErrors()) {
-            return "/admin/product/create";
+            return "admin/product/create";
         }
 
         String image = this.uploadService.handleSaveUploadFile(file, "product");
@@ -132,4 +154,5 @@ public class ProductController {
 
         return "redirect:/admin/product";
     }
+
 }
